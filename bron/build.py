@@ -119,7 +119,7 @@ def page(slug, title, body, description=""):
 <link rel="icon" href="img/alc-logo-big.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="page-{slug}">
@@ -263,51 +263,115 @@ def strip_title(frag, title):
 
 def build_home():
     frag = {s: read(s) for s, _ in OVERIG}
-    sponsors = "".join(
+    logos = "".join(
         f'<a href="{u}" target="_blank" rel="noopener" title="{esc(n)}"><img src="img/{f}" alt="{esc(n)}" loading="lazy"></a>'
         for n, u, f in SPONSORS
     )
+    check = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>'
+    faq = [
+        ("Wanneer en waar bouwen jullie?",
+         "<p>Bouwen doen we in ons clubgebouw, gevestigd in zaalsport “De Rietebeek”, "
+         f'<a href="{MAPS}" target="_blank" rel="noopener">Blekerstraat 6 in Arnhem</a>, op dinsdag- en vrijdagavond van 19.00 tot 22.30 uur. '
+         "Iedereen is welkom om kennis te komen maken, rond te kijken, en lid te worden.</p>"
+         "<p>Op de parkeerplaats is er na 20 meter een groen hek aan de linkerkant, daarachter mogen leden/bezoekers van de ALC gratis parkeren. "
+         "Let op, de openbare parkeerplaatsen zijn betaald tot 23:00 u! Aan het einde van de parkeerplaats staat op links een gymzaal (sport- en spelzaal “de Rietebeek”), "
+         "in dit gebouw zit de ALC. In de lange kant van het gebouw bevindt zich een stalen hek, hierachter zit de deur naar het lokaal. "
+         "Als u aanbelt komt één van de leden u halen.</p>"),
+        ("Waar vliegen jullie?",
+         "<p>Op twee locaties mogen we vliegen met onze vliegtuigen, de heide op de Posbank en bij een boer in Duiven. "
+         'Lees meer over ons <a href="vliegterrein.html">vliegterrein</a>.</p>'),
+        ("Heb ik ervaring nodig?",
+         "<p>Afhankelijk van je bouw-ervaring, bepaal je zelf wat voor model je wilt bouwen, vanaf een tekening of met een bouwdoos, dat maakt niet uit! "
+         "In alle klassen zijn verschillende beginners- en gevorderden modellen voor handen.<br>"
+         "Actieve leden met veel ervaring helpen en begeleiden nieuwe leden om ervoor te zorgen dat je eerste model ook echt vliegt.</p>"),
+        ("Wat kost het bouwen?",
+         "<p>De kosten voor de materialen variëren van een paar euro voor een eenvoudig werpmodel tot ….<br>"
+         "Voor radiobesturing heb je behalve het vliegtuig ook een zender, een ontvanger, servo’s en accu’s nodig. "
+         "Bij beginners helpen we je met de eerste aanzet, ook met deze apparatuur totdat je zelf een keuze gemaakt hebt wat je zelf wilt aanschaffen.</p>"),
+        ("Wat is RES vliegen?",
+         "<p>We spelen in op nieuwe disciplines zoals bijvoorbeeld nu het RES (Rudder, Elevator, Spoiler) vliegen. "
+         "Dit zijn modelzwevers met een spanwijdte van 2 meter, maar zo licht mogelijk gebouwd om onder minimale windsterkte te kunnen vliegen. "
+         '<a href="res-vliegen.html">Lees meer over RES vliegen</a>.</p>'),
+    ]
+    faq_html = "".join(
+        f'<details class="x-faq-item"{" open" if i == 0 else ""}><summary>{esc(q)}<span class="x-plus" aria-hidden="true"></span></summary><div>{a}</div></details>'
+        for i, (q, a) in enumerate(faq)
+    )
     body = f"""
-<section class="hero">
-  <div class="hero-bg" style="background-image:url('img/Thomas-Cup-2018-start-vintage-zweefmodel.jpg')"></div>
-  <div class="wrap hero-inner">
-    <img class="hero-logo" src="img/alc-logo-big.jpg" alt="" width="140" height="140">
-    <div>
-      <p class="kicker">Opgericht in 1930</p>
-      <h1>{SITE}</h1>
-      <p class="lead">{TAGLINE}</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="contact.html">Kom kennismaken</a>
-        <a class="btn btn-ghost" href="modelvliegen.html">Over modelvliegen</a>
-      </div>
+<section class="x-hero">
+  <div class="x-grid" aria-hidden="true"></div>
+  <div class="x-glow" aria-hidden="true"></div>
+  <canvas class="x-sky" aria-hidden="true"></canvas>
+  <div class="wrap x-hero-inner">
+    <a class="x-badge" href="overig.html"><span class="x-dot"></span>Opgericht in 1930 · Arnhem <span class="x-badge-link">Verslagen {ICON["arrow"]}</span></a>
+    <h1>De modelbouw vliegclub <span class="x-grad">van Arnhem</span></h1>
+    <p class="x-lead">Wij, de Arnhemse Luchtvaartclub (ALC), zijn op zoek naar nieuwe leden. Wij zijn de oudste modelvliegclub die ook zelf de zweefvliegtuigen bouwt van Nederland.</p>
+    <div class="x-actions">
+      <a class="x-btn x-btn-dark" href="contact.html">Kom kennismaken {ICON["arrow"]}</a>
+      <a class="x-btn x-btn-light" href="modelvliegen.html">Over modelvliegen</a>
     </div>
+    <p class="x-meta">{ICON["clock"]} Bouwavonden dinsdag &amp; vrijdag 19.00 – 22.30 <span>·</span> {ICON["pin"]} Blekerstraat 6, Arnhem</p>
+  </div>
+  <div class="wrap x-shot-wrap">
+    <div class="x-shot">
+      <div class="x-shot-bar"><i></i><i></i><i></i><span>clublokaal · Spijkerkwartier, Arnhem</span></div>
+      <img src="img/banner.png" alt="ALC Werkplaats" width="1093" height="216" data-zoom>
+    </div>
+    <div class="x-float x-float-a"><strong>4 m</strong><span>spanwijdte, zelf gebouwd</span></div>
+    <div class="x-float x-float-b"><strong>94 jaar</strong><span>Wij bestaan 94 jaar.</span></div>
   </div>
 </section>
 
-<section class="section intro">
-  <div class="wrap narrow">
-    <p class="intro-text">Wij, de Arnhemse Luchtvaartclub (ALC), zijn op zoek naar nieuwe leden. Wij zijn de oudste modelvliegclub die ook zelf de zweefvliegtuigen bouwt van Nederland. In ons eigen clublokaal in het Arnhemse Spijkerkwartier bouwen we model zweefvliegtuigen met een spanwijdte tot wel 4 meter. Op twee locaties mogen we vliegen met onze vliegtuigen, de heide op de Posbank en bij een boer in Duiven. Wij bestaan 94 jaar.</p>
-  </div>
-  <div class="wrap facts">
-    <div class="fact"><strong>1930</strong><span>opgericht</span></div>
-    <div class="fact"><strong>4 m</strong><span>spanwijdte, zelf gebouwd</span></div>
-    <div class="fact"><strong>2×</strong><span>bouwavond per week</span></div>
-    <div class="fact"><strong>2</strong><span>vlieglocaties</span></div>
-  </div>
-</section>
-
-<section class="section news">
+<section class="x-logos">
   <div class="wrap">
-    <div class="section-head">
-      <h2>Nieuws</h2>
-      <a class="link-more" href="overig.html">Alle verslagen {ICON["arrow"]}</a>
+    <p>Gesteund door onze sponsoren</p>
+    <div class="x-logo-row">{logos}</div>
+  </div>
+</section>
+
+<section class="x-section">
+  <div class="wrap">
+    <div class="x-head">
+      <span class="x-pill">Wat we doen</span>
+      <h2>Bouwen, vliegen en <span class="x-grad">samen leren</span></h2>
+      <p>In ons eigen clublokaal in het Arnhemse Spijkerkwartier bouwen we model zweefvliegtuigen met een spanwijdte tot wel 4 meter.</p>
     </div>
-    <article class="feature">
-      <div class="feature-img"><img src="img/PromotieMateriaalVanSponsoren.jpg" alt="Promotie materiaal van sponsoren" loading="lazy" data-zoom></div>
-      <div class="feature-body">
-        <p class="kicker">Sponsoren</p>
+    <div class="x-bento">
+      <article class="x-tile x-tile-wide x-tile-photo">
+        <img src="img/WhatsApp-Image-2024-05-02-at-11.14.38-1-Copy.jpeg" alt="Ready for take-off" loading="lazy">
+        <div><span class="x-tag">Bouwen</span><h3>Een eigen bouwruimte</h3><p>De ALC is één van de weinige modelvliegclubs in Nederland die in het bezit van een eigen bouwruimte. Hier zijn alle gereedschappen en materialen aanwezig, die nodig zijn om modelvliegtuigen te kunnen bouwen.</p></div>
+      </article>
+      <article class="x-tile x-tile-blue">
+        <span class="x-tag">Vliegen</span><h3>Rozendaalse Veld, Posbank en Duiven</h3><p>Naast de bouwavonden op dinsdag en vrijdag, gaan we ook regelmatig vliegen op het Rozendaalse Veld, bij de boer of we gaan naar wedstrijden.</p>
+        <a class="x-more" href="vliegterrein.html">Vliegterrein {ICON["arrow"]}</a>
+      </article>
+      <article class="x-tile">
+        <span class="x-tag">Leren</span><h3>Les van ervaren leden</h3><p>Ervaren leden van onze club geven les wat je moet doen om goed te leren vliegen.</p>
+        <a class="x-more" href="brevet-vliegen.html">Brevet vliegen {ICON["arrow"]}</a>
+      </article>
+      <article class="x-tile">
+        <span class="x-tag">Stiltesport</span><h3>Zweefmodellen hebben onze voorkeur</h3><p>Wij starten deze modellen met een lijn: met de hand, een rubber of een lier opgetrokken. Electromodellen worden zo gebouwd dat de herrie van de motor tot een minimum beperkt blijft.</p>
+      </article>
+      <article class="x-tile x-tile-photo x-tile-tall">
+        <img src="img/Thomas-Cup-2018-start-vintage-zweefmodel.jpg" alt="Start vintage zweefmodel" loading="lazy">
+        <div><span class="x-tag">Wedstrijden &amp; uitstapjes</span><h3>Thomas Cup, Eifel en Maasvlakte</h3><p>Ook maken we uitstapjes om helling te vliegen in de Eifel, of aan de kust bij de Maasvlakte 2.</p><a class="x-more" href="thomas-cup.html">Thomas CUP {ICON["arrow"]}</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="x-section x-alt">
+  <div class="wrap">
+    <div class="x-head x-head-row">
+      <div><span class="x-pill">Nieuws</span><h2>Laatste verslagen</h2></div>
+      <a class="x-btn x-btn-light" href="overig.html">Alle verslagen {ICON["arrow"]}</a>
+    </div>
+    <article class="x-feature">
+      <img src="img/PromotieMateriaalVanSponsoren.jpg" alt="Promotie materiaal van sponsoren" loading="lazy" data-zoom>
+      <div>
+        <span class="x-tag">Sponsoren</span>
         <h3>Sponsoren verrassen ALC met mooie flyers en stickers om de club te promoten.</h3>
-        <p class="feature-thanks">Dank! Engelen &amp; de Vrind en it2grow</p>
+        <p><strong>Dank! Engelen &amp; de Vrind en it2grow</strong></p>
         <p>( <a href="https://www.endv.nl/" target="_blank" rel="noopener">Engelen &amp; de Vrind</a>, <a href="https://it2grow.nl/" target="_blank" rel="noopener">it2grow</a> )</p>
       </div>
     </article>
@@ -322,42 +386,74 @@ def build_home():
   </div>
 </section>
 
-<section class="section about">
-  <div class="wrap about-grid">
-    <div class="about-text">
-      <p class="kicker">Over de club</p>
-      <h2>Arnhemse Luchtvaart Club (ALC)</h2>
-      <p>De ALC is opgericht in 1930 en bestaan dus bijna 100 jaar. Veel is er uit die tijd overgebleven in ons archief, misschien moeten we nog eens diep gaan graven om meer uit die tijd te weten te komen. We hebben n.l. in ons “kantoor” een grote hoeveelheid mappen staan die waardevolle informatie bevatten uit de afgelopen 90 jaar. Ook een aantal van onze leden hebben een eigen plakboek samengesteld, in de loop der jaren hebben we meermaals de krant gehaald.</p>
-      <p>Vanaf het begin is er gevlogen op Het Rozendaals Veld bij de brandtoren. De eerste wedstrijd hebben we daar gevlogen in 1932.<br>We hebben nog vergunningen waar precies aangegeven staat waar brandstofmodellen mogen starten en landen, waar vrije vluchtmodellen met een lont mochten vliegen etc.</p>
-      <p>Intussen is dit ondenkbaar geworden. Geluidsoverlast en brandgevaar lagen ook toen al op de loer. Als vereniging hebben we toen gekozen voor de zgn. stiltesporten, zweefmodellen hebben onze voorkeur.</p>
-      <p>Wij starten deze modellen met een lijn: met de hand, een rubber of een lier opgetrokken. Electromodellen worden zo gebouwd dat de herrie van de motor tot een minimum beperkt blijft. Vaak zijn ze op enige meters nauwelijks nog te horen.</p>
-    </div>
-    <aside class="visit">
-      <h3>Kom langs</h3>
-      <ul class="info-list">
-        <li>{ICON["clock"]}<div><strong>Bouwavonden</strong><br>Dinsdag- en vrijdagavond van 19.00 tot 22.30 uur</div></li>
-        <li>{ICON["pin"]}<div><strong>Clubgebouw</strong><br>Zaalsport “De Rietebeek”<br><a href="{MAPS}" target="_blank" rel="noopener">Blekerstraat 6 in Arnhem</a></div></li>
-        <li>{ICON["file"]}<div><strong>Folder</strong><br><a href="downloads/Folder-ALC.pdf" target="_blank" rel="noopener">Download Folder-ALC</a></div></li>
-      </ul>
-      <p>Bouwen doen we in ons clubgebouw, gevestigd in zaalsport “De Rietebeek”, Blekerstraat 6 in Arnhem, op dinsdag- en vrijdagavond van 19.00 tot 22.30 uur. Iedereen is welkom om kennis te komen maken, rond te kijken, en lid te worden.</p>
-      <details>
-        <summary>Parkeren en de weg naar het lokaal</summary>
-        <p>Op de parkeerplaats is er na 20 meter een groen hek aan de linkerkant, daarachter mogen leden/bezoekers van de ALC gratis parkeren. Let op, de openbare parkeerplaatsen zijn betaald tot 23:00 u! Aan het einde van de parkeerplaats staat op links een gymzaal (sport- en spelzaal “de Rietebeek”), in dit gebouw zit de ALC. In de lange kant van het gebouw bevindt zich een stalen hek, hierachter zit de deur naar het lokaal. Als u aanbelt komt één van de leden u halen.</p>
-      </details>
-    </aside>
+<section class="x-section">
+  <div class="wrap x-quote">
+    <blockquote>”Ik zit in mijn vliegstoel en ben met hulp van Ab Janssen mijn CX mini-RES aan het afstellen voor een strakke lancering aan het korte bungee lijntje. En dat lukte uiteindelijk prima alleen ging bij de landing van de laatste vlucht het kielvlak in tweeen….. “</blockquote>
+    <p class="x-quote-by"><img src="img/WhatsApp-Image-2024-05-02-at-11.14.38-2-Copy.jpeg" alt="" loading="lazy"> <span><strong>Ron</strong> · <a href="geweldige-vliegavond.html">Geweldige vliegavond!</a></span></p>
   </div>
 </section>
 
-<section class="section sponsors">
-  <div class="wrap">
-    <div class="section-head center"><h2>Onze sponsoren</h2></div>
-    <div class="logo-row">{sponsors}</div>
-    <div class="sponsorkliks">
-      <a href="https://www.sponsorkliks.com/products/shops.php?club=12273&amp;sc=dyn-bnnr-bol" target="_blank" rel="noopener"><img src="img/sponsorkliks.png" alt="SponsorKliks" width="187" height="89" loading="lazy"></a>
-      <a href="https://www.sponsorkliks.com/products/shops.php?club=12273&amp;sc=dyn-bnnr-bol" target="_blank" rel="noopener">Sponsor ook de Arnhemse Luchtvaart Club</a>
+<section class="x-section x-alt">
+  <div class="wrap x-member">
+    <div>
+      <span class="x-pill">Lidmaatschap</span>
+      <h2>Probeer het <span class="x-grad">2 maanden gratis</span></h2>
+      <p>Om te ervaren of onze club bij je past wordt er voor de eerste 2 maanden geen contributie gevraagd. Loop eens binnen op de club, kom een kopje koffie drinken en kijk of er iets is wat je leuk vindt om te gaan doen.</p>
+      <a class="x-btn x-btn-dark" href="modelvliegen.html">Lees alles over lidmaatschap {ICON["arrow"]}</a>
+    </div>
+    <div class="x-price">
+      <div class="x-price-top"><span>Eerste 2 maanden</span><strong>€0</strong><small>geen contributie</small></div>
+      <ul>
+        <li>{check}<span>Automatisch lid van de <a href="https://www.knvvl.nl/modelvliegsport/" target="_blank" rel="noopener">KNVvL</a>, en verzekerd als je eigen WA verzekering je in de steek laat</span></li>
+        <li>{check}<span>Huisgenootlidmaatschap: de oudste betaalt de volle contributie en de volgende 50%</span></li>
+        <li>{check}<span>Jeugdleden betalen een gereduceerd bedrag</span></li>
+        <li>{check}<span>Hulp bij je eerste model, ook met de apparatuur</span></li>
+        <li>{check}<span>Eigen bouwruimte met alle gereedschappen en materialen</span></li>
+      </ul>
+      <a class="x-btn x-btn-blue" href="contact.html">Kom kennismaken</a>
     </div>
   </div>
 </section>
+
+<section class="x-section">
+  <div class="wrap x-about">
+    <div>
+      <span class="x-pill">Over de club</span>
+      <h2>Arnhemse Luchtvaart Club (ALC)</h2>
+      <a class="x-btn x-btn-light" href="downloads/Folder-ALC.pdf" target="_blank" rel="noopener">{ICON["file"]} Download Folder-ALC</a>
+    </div>
+    <div class="x-about-text">
+      <p>De ALC is opgericht in 1930 en bestaan dus bijna 100 jaar. Veel is er uit die tijd overgebleven in ons archief, misschien moeten we nog eens diep gaan graven om meer uit die tijd te weten te komen. We hebben n.l. in ons “kantoor” een grote hoeveelheid mappen staan die waardevolle informatie bevatten uit de afgelopen 90 jaar. Ook een aantal van onze leden hebben een eigen plakboek samengesteld, in de loop der jaren hebben we meermaals de krant gehaald.</p>
+      <p>Vanaf het begin is er gevlogen op Het Rozendaals Veld bij de brandtoren. De eerste wedstrijd hebben we daar gevlogen in 1932.<br>We hebben nog vergunningen waar precies aangegeven staat waar brandstofmodellen mogen starten en landen, waar vrije vluchtmodellen met een lont mochten vliegen etc.</p>
+      <p>Intussen is dit ondenkbaar geworden. Geluidsoverlast en brandgevaar lagen ook toen al op de loer. Als vereniging hebben we toen gekozen voor de zgn. stiltesporten, zweefmodellen hebben onze voorkeur.</p>
+    </div>
+  </div>
+</section>
+
+<section class="x-section x-alt">
+  <div class="wrap x-faq">
+    <div class="x-head">
+      <span class="x-pill">Veelgestelde vragen</span>
+      <h2>Goed om te weten</h2>
+    </div>
+    <div class="x-faq-list">{faq_html}</div>
+  </div>
+</section>
+
+<section class="x-section">
+  <div class="wrap">
+    <div class="x-cta">
+      <div class="x-grid" aria-hidden="true"></div>
+      <h2>Loop eens binnen op de club</h2>
+      <p>Iedereen is welkom om kennis te komen maken, rond te kijken, en lid te worden.</p>
+      <div class="x-actions">
+        <a class="x-btn x-btn-yellow" href="contact.html">Contact {ICON["arrow"]}</a>
+        <a class="x-btn x-btn-ghost" href="https://www.sponsorkliks.com/products/shops.php?club=12273&amp;sc=dyn-bnnr-bol" target="_blank" rel="noopener">Sponsor ook de Arnhemse Luchtvaart Club</a>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="js/gliders.js" defer></script>
 """
     return page("index", "Home", body)
 
