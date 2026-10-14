@@ -1,5 +1,10 @@
 // Mobiel menu, submenu en fotovergroting (lightbox)
 (function () {
+  var header = document.querySelector('.site-header');
+  function onScroll() { header.classList.toggle('scrolled', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
   var toggle = document.querySelector('.menu-toggle');
   var nav = document.querySelector('.main-nav');
   if (toggle && nav) {
